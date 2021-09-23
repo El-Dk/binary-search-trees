@@ -68,6 +68,59 @@ class Tree
     smallest_node(node.left_node)
   end
 
+  def include?(value, node = @root)
+    return false if node.nil?
+
+    if value > node.value
+      include?(value, node.right_node)
+    elsif value < node.value
+      include?(value, node.left_node)
+    else
+      true
+    end
+  end
+
+  def find(value, node = @root)
+    return nil if node.nil?
+
+    if value > node.value
+      find(value, node.right_node)
+    elsif value < node.value
+      find(value, node.left_node)
+    else
+      node
+    end
+  end
+
+  def level_order(values_array = [], node = @root, array = [])
+    return nil if node.nil?
+
+    values_array << node.value
+    i = 0
+    unless node.left_node.nil?
+      array << node.left_node
+      i += 1
+    end
+    unless node.right_node.nil?
+      array << node.right_node
+      i += 1
+    end
+    i.times { level_order(values_array, array.shift, array) }
+    values_array
+  end
+
+  def level_order_iterator
+    return nil if @root.nil?
+    node_array = [@root]
+    values_array = []
+    node_array.each do |node|
+      values_array << node.value
+      node_array << node.left_node unless node.left_node.nil?
+      node_array << node.right_node unless node.right_node.nil?
+    end
+    values_array
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_node, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_node
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
