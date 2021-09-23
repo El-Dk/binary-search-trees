@@ -111,6 +111,7 @@ class Tree
 
   def level_order_iterator
     return nil if @root.nil?
+    
     node_array = [@root]
     values_array = []
     node_array.each do |node|
@@ -118,6 +119,33 @@ class Tree
       node_array << node.left_node unless node.left_node.nil?
       node_array << node.right_node unless node.right_node.nil?
     end
+    values_array
+  end
+
+  def inorder(values_array = [], node = @root)
+    return nil if node.nil?
+
+    inorder(values_array, node.left_node)
+    values_array << node.value
+    inorder(values_array, node.right_node)
+    values_array
+  end
+
+  def preorder(values_array = [], node = @root)
+    return nil if node.nil?
+
+    values_array << node.value
+    preorder(values_array, node.left_node)
+    preorder(values_array, node.right_node)
+    values_array
+  end
+
+  def postorder(values_array = [], node = @root)
+    return nil if node.nil?
+
+    postorder(values_array, node.left_node)
+    postorder(values_array, node.right_node)
+    values_array << node.value
     values_array
   end
 
