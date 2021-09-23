@@ -4,7 +4,6 @@ require './lib/node'
 
 # Tree class definition
 class Tree
-  attr_reader :root
   def initialize(array)
     cleaned_array = array.uniq.sort
     @root = build_tree(cleaned_array, 0, cleaned_array.length - 1)
@@ -21,6 +20,8 @@ class Tree
   end
 
   def insert(value, node = @root)
+    return nil if find(value)
+
     new_node = Node.new(value)
     if @root.nil?
       @root = new_node
@@ -112,7 +113,7 @@ class Tree
 
   def level_order_iterator
     return nil if @root.nil?
-    
+
     node_array = [@root]
     values_array = []
     node_array.each do |node|
@@ -162,7 +163,7 @@ class Tree
 
   def depth(node, current_node = @root, depth = 0)
     return 0 if current_node.nil?
-    
+
     if node.value < current_node.value
       depth += 1
       depth(node, current_node.left_node, depth)
@@ -176,9 +177,9 @@ class Tree
 
   def balanced?(node = @root)
     return nil if @root.nil?
-    
+
     return true if node.nil?
-    
+
     balanced = balanced?(node.left_node) && balanced?(node.right_node)
     balanced = false if (height(node.left_node) - height(node.right_node)).abs > 1
     balanced
