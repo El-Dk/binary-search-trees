@@ -4,6 +4,7 @@ require './lib/node'
 
 # Tree class definition
 class Tree
+  attr_reader :root
   def initialize(array)
     cleaned_array = array.uniq.sort
     @root = build_tree(cleaned_array, 0, cleaned_array.length - 1)
@@ -147,6 +148,30 @@ class Tree
     postorder(values_array, node.right_node)
     values_array << node.value
     values_array
+  end
+
+  def height(node = @root, current_height = 0, heights = [])
+    return 0 if node.nil?
+
+    heights << current_height if node.left_node.nil? && node.right_node.nil?
+    current_height += 1
+    height(node.left_node, current_height, heights)
+    height(node.right_node, current_height, heights)
+    heights.max
+  end
+
+  def depth(node, current_node = @root, depth = 0)
+    return 0 if current_node.nil?
+    
+    if node.value < current_node.value
+      depth += 1
+      depth(node, current_node.left_node, depth)
+    elsif node.value > current_node.value
+      depth += 1
+      depth(node, current_node.right_node, depth)
+    else
+      depth
+    end
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
