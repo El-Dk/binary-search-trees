@@ -184,6 +184,13 @@ class Tree
     balanced
   end
 
+  def rebalance
+    return nil if @root.nil? || balanced?
+
+    values_array = level_order.uniq.sort
+    @root = build_tree(values_array, 0, values_array.length - 1)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right_node, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right_node
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
